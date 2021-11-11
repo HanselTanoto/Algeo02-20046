@@ -1,4 +1,5 @@
 import numpy as np
+import cv2
 import vektor           # untuk cari nilai dan vektor eigen
 
 def matrixSVD(M):
@@ -38,3 +39,38 @@ def multiplySVD(nU, ns, nV_T):
 # Menghitung hasil perkalian matriks U, S, dan V_T 
     result = np.dot(np.dot(nU,np.diag(ns)),nV_T)
     return result
+
+
+def svdCompression(M, c_rate):
+# kompresi matriks gambar dengan svd
+    U, S, V_T = matrixSVD(M)
+    nU, nS, nV_T, size = compress(U, S, V_T, c_rate)
+    new_M = multiplySVD(nU, nS, nV_T)
+    return new_M, size
+
+
+def svdColor(M, c_rate):
+    # split matriks ke matriks R,G,B
+    M_b, M_g, M_r = cv2.split(M)              
+    # ukuran awal
+    m,n,c = M.shape
+    size0 = m * n * c
+    # svd compression
+    new_M_b, size_b = svdCompression(M_b, c_rate)
+    new_M_g, size_g = svdCompression(M_g, c_rate)
+    new_M_r, size_r = svdCompression(M_r, c_rate)
+    new_size = size_b + size_g + size_r
+    # menggabungkan matriks R,G,B
+    new_M = cv2.merge([new_M_b, new_M_g, new_M_r])
+    new_M = np.clip(new_M, 0, 255)
+    return new_M, size0, new_size
+
+
+def svdGrayscale(M, c_rate):
+    # ukuran awal
+    m, n = M.shape
+    size0 = m * n
+    print("Initial size:", size0, "bytes")
+    # svd compression
+    new_M, new_size = svdCompression(M, c_rate)
+    return new_M, size0, new_size
