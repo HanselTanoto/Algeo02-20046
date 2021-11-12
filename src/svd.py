@@ -1,6 +1,5 @@
 import numpy as np
 import cv2
-import qr
 import vektor           # untuk cari nilai dan vektor eigen
 
 def matrixSVD(M):
@@ -14,7 +13,6 @@ def matrixSVD(M):
     #e_vec1 = np.flip(e_vec1, axis=1)           # 
     e_val, e_vec = vektor.simultaneous_power_iteration(M_M_T)
     e_val = np.sort(e_val)[::-1]
-    print(e_vec.shape) 
     U = e_vec                  # Matriks U / Singular kiri 
     s = np.sqrt(e_val)         # Nilai singular
 
@@ -22,7 +20,8 @@ def matrixSVD(M):
     U_i = np.linalg.inv(U)                      # Cari matriks U invers
     s_i = 1/s                                   # Cari matriks S invers
     S_i = np.zeros((M.shape[1], M.shape[0]))
-    S_i[:M.shape[0], :M.shape[0]] = np.diag(s_i)
+    x = min(M.shape[1], M.shape[0])
+    S_i[:x, :x] = np.diag(s_i[:x])
     V_T = np.dot(S_i,np.dot(U_i,M))             # Hitung V_T = S_i*V_i*M
 
     return U, s, V_T
@@ -54,11 +53,11 @@ def svdCompression(M, c_rate):
 
 
 def svdColor(M, c_rate):
-    # split matriks ke matriks R,G,B
-    M_b, M_g, M_r = cv2.split(M)              
     # ukuran awal
     m,n,c = M.shape
     size0 = (m * n) * c
+    # split matriks ke matriks R,G,B
+    M_b, M_g, M_r = cv2.split(M)
     # svd compression
     new_M_b, size_b = svdCompression(M_b, c_rate)
     new_M_g, size_g = svdCompression(M_g, c_rate)
@@ -76,5 +75,23 @@ def svdGrayscale(M, c_rate):
     size0 = m * n
     # svd compression
     new_M, new_size = svdCompression(M, c_rate)
+    new_M = np.clip(new_M, 0, 255)
+    return new_M, size0, new_size
+
+
+def svdColorPNG(M, c_rate):
+    # ukuran awal
+    m,n,c = M.shape
+    size0 = (m * n) * c
+    # split matriks ke matriks R,G,B,A
+    M_b, M_g, M_r, M_a = cv2.split(M)
+    # svd compression
+    new_M_b, size_b = svdCompression(M_b, c_rate)
+    new_M_g, size_g = svdCompression(M_g, c_rate)
+    new_M_r, size_r = svdCompression(M_r, c_rate)
+    new_M_a, size_a = svdCompression(M_a, c_rate)
+    new_size = size_b + size_g + size_r + size_a
+    # menggabungkan matriks R,G,B,A
+    new_M = cv2.merge([new_M_b, new_M_g, new_M_r, new_M_a])
     new_M = np.clip(new_M, 0, 255)
     return new_M, size0, new_size
