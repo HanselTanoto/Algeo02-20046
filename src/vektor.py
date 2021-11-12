@@ -1,4 +1,5 @@
 import numpy as np
+
 def simultaneous_power_iteration(A):
     n, m = A.shape
     Q = np.random.rand(n,1000)
@@ -18,8 +19,3 @@ def simultaneous_power_iteration(A):
             break
 
     return np.diag(R), Q
-
-A = np.array([[3,0],[8,-1]])
-nilai_eigen,vektor_eigen = simultaneous_power_iteration(A)
-print(nilai_eigen)
-print(vektor_eigen)
