@@ -1,5 +1,6 @@
 import numpy as np
 import cv2
+import qr
 import vektor           # untuk cari nilai dan vektor eigen
 
 def matrixSVD(M):
@@ -8,11 +9,14 @@ def matrixSVD(M):
     M_M_T = np.dot(M, M_T)      # M*transpose(M)
     M_T_M = np.dot(M_T, M)      # transpose(M)*M
     
-    e_val1, e_vec1 = np.linalg.eigh(M_M_T)      # sementara
-    e_val1 = np.flip(e_val1, axis=0)            # 
-    e_vec1 = np.flip(e_vec1, axis=1)            # 
-    U = e_vec1                  # Matriks U / Singular kiri 
-    s = np.sqrt(e_val1)         # Nilai singular
+    #e_val1, e_vec1 = np.linalg.eigh(M_M_T)     # sementara
+    #e_val1 = np.flip(e_val1, axis=0)           #
+    #e_vec1 = np.flip(e_vec1, axis=1)           # 
+    e_val, e_vec = vektor.simultaneous_power_iteration(M_M_T)
+    e_val = np.sort(e_val)[::-1]
+    print(e_vec.shape) 
+    U = e_vec                  # Matriks U / Singular kiri 
+    s = np.sqrt(e_val)         # Nilai singular
 
     # Matriks V_T / Singular kanan
     U_i = np.linalg.inv(U)                      # Cari matriks U invers
@@ -27,7 +31,7 @@ def matrixSVD(M):
 def compress(U, s, V_T, rate):
 # mengambil hanya mxk matriks U, kxk S, dan kxn matriks V_T
     m,n = U.shape[0], V_T.shape[0]      # dimensi 
-    k = int(rate/100*min(m,n))          # faktor skala kompresi
+    k = int((rate*(m*n)/100)/(m+n+1))   # faktor skala kompresi
     nU = U[:, 0:k]                      # ambil mxk matriks U
     ns = s[0:k]                         # ambil k data pertama dari s (nilai singular)
     nV_T = V_T[0:k, :]                  # ambil kxn matriks V_T
@@ -54,7 +58,7 @@ def svdColor(M, c_rate):
     M_b, M_g, M_r = cv2.split(M)              
     # ukuran awal
     m,n,c = M.shape
-    size0 = m * n * c
+    size0 = (m * n) * c
     # svd compression
     new_M_b, size_b = svdCompression(M_b, c_rate)
     new_M_g, size_g = svdCompression(M_g, c_rate)
@@ -70,7 +74,7 @@ def svdGrayscale(M, c_rate):
     # ukuran awal
     m, n = M.shape
     size0 = m * n
-    print("Initial size:", size0, "bytes")
     # svd compression
     new_M, new_size = svdCompression(M, c_rate)
+    new_M = np.clip(new_M, 0, 255)
     return new_M, size0, new_size
