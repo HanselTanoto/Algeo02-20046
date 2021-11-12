@@ -1,32 +1,25 @@
-# vektor eigen
-baris = 10
-kolom = 10
-matriks = [[0 for j in range(baris)] for i in range(kolom)]
+import numpy as np
+def simultaneous_power_iteration(A):
+    n, m = A.shape
+    Q = np.random.rand(n,1000)
+    Q, _ = np.linalg.qr(Q)
+    Q_prev = Q
+ 
+    for i in range(1000):
+        Z = A.dot(Q)
+        Q, R = np.linalg.qr(Z)
+        
+        err = ((Q - Q_prev) ** 2).sum()
+        if i % 10 == 0:
+            print(i, err)
 
-def determinan(matriks,barismatriks, kolommatriks):
-    matriksdet = [[0 for j in range(kolommatriks)] for i in range(barismatriks)]
-    det = 1
-    # copy matriks
-    for i in range(barismatriks):
-        for j in range(kolommatriks):
-            matriksdet[i][j] = matriks[i][j]
-    for i in range(1,barismatriks):
-        for j in range(kolommatriks):
-            obe = float(matriksdet[i][j])/float(matriksdet[j][j])
-            for k in range(kolommatriks):
-                matriksdet[i][k] -= obe * matriksdet[j][k] 
-    for i in range(barismatriks):
-        for j in range(kolommatriks):
-            if(i == j):
-                det *= matriksdet[i][j]
-    if det == 0 or det == -0:
-        det = 0
-    return det
+        Q_prev = Q
+        if err < 1e-3:
+            break
 
-matriksidentitas = [[0 for j in range(baris)] for i in range(kolom)]
-for i in range(baris):
-    for j in range(kolom):
-        if (i == j):
-            matriksidentitas[i][j] = 1
+    return np.diag(R), Q
 
-eigen = [0 for i in range(baris)]
+A = np.array([[3,0],[8,-1]])
+nilai_eigen,vektor_eigen = simultaneous_power_iteration(A)
+print(nilai_eigen)
+print(vektor_eigen)
