@@ -7,12 +7,11 @@ def matrixSVD(M):
     M_T = np.transpose(M)       # transpose(M)
     M_M_T = np.dot(M, M_T)      # M*transpose(M)
     M_T_M = np.dot(M_T, M)      # transpose(M)*M
-    
-    #e_val1, e_vec1 = np.linalg.eigh(M_M_T)     # sementara
-    #e_val1 = np.flip(e_val1, axis=0)           #
-    #e_vec1 = np.flip(e_vec1, axis=1)           # 
-    e_val, e_vec = vektor.simultaneous_power_iteration(M_M_T)
+ 
+    # hitung vektor dan nilai eigen
+    e_val, e_vec = vektor.eigen(M_M_T)
     e_val = np.sort(e_val)[::-1]
+    
     U = e_vec                  # Matriks U / Singular kiri 
     s = np.sqrt(e_val)         # Nilai singular
 

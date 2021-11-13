@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <link rel="stylesheet" type="text/css" href="../static/style.css"> 
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Image Compression - Tubes 2 Algeo</title>
+    </head>
+    <body>
+        <div id="page" style="height: auto !important;">
+        </div>
+        
+        <h1>Compressing Image Using SVD</h1>
+        
+        <form action="/" method="post" enctype="multipart/form-data">
+            <div class="Settings">
+            <hr>
+            1) <b id="steps">Select image </b><br><br>
+            </div>
+            <input type="file" name="file" id="uploadfile" style="font-size:14px;height:32px;width:50%;" autocomplete="off" required>
+            
+            <p>
+                {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    <ul>
+                    {% for message in messages %}
+                    <p>{{ message }}</p>
+                    {% endfor %}
+                    </ul>
+                {% endif %}
+                {% endwith %}
+            </p>
+            
+            <div class="Settings">
+            2) <strong id="steps">Compression Scale</strong><br>
+            <p id="input">Image Compression Rate (from 1 to 100)</p> 
+            <input type="number" name="quality" value="" min="1" max="100" style="width:50px;" autocomplete="off" required>
+            </div>
+
+            <div class="Settings">
+                <input class="input" id= "cmprs" type="submit" value="Compress" name="submit" style="width: 100px;height:30px;font-size:15px;text-align:center;">
+            </div>
+            
+            {% if filename %}
+                <div class="result_data" id="result-data">
+                    <p>{{init_size}}</p>
+                    <p>{{comp_size}}</p>
+                    <p>{{percentage}}</p>
+                    <p>{{time}}</p>
+                </div>
+            {% endif %}
+            
+            <div class="container">
+                <div class="before">
+                    <h2>Before</h2>
+                    {% if filename %}
+                    <div class="imagepreview" id="image-preview">
+                        <img src="{{ url_for('display_result', filename=filename) }}" >
+                    </div>
+                    {% endif %}
+                </div>
+                
+                <div class="after">
+                    <h2>After</h2>
+                    {% if filename %}
+                    <div class="imagepreview" id="image-preview">
+                        <img src="{{ url_for('display_result', filename=c_img_filename) }}" >
+                    </div>
+
+                    <div class="download_button">
+                        <a href="../static/uploads/{{c_img_filename}}"+ download rel="noopener noreferrer" target="_blank">
+                            Download
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <hr style="width: 100%; float: none;">
+            
+        </form>
+    </body>
+</html>
+    
