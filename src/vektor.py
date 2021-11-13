@@ -11,8 +11,6 @@ def simultaneous_power_iteration(A):
         Q, R = np.linalg.qr(Z)
         
         err = ((Q - Q_prev) ** 2).sum()
-        if i % 10 == 0:
-            print(i, err)
 
         Q_prev = Q
         if err < 1e-3:
