@@ -1,7 +1,7 @@
 from flask import Flask, flash, request, redirect, url_for, render_template
 from werkzeug.utils import secure_filename
 import os
-from modules import img_compress
+import img_compress
 
 app = Flask(__name__)
  
