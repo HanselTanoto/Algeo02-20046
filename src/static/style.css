@@ -17,10 +17,15 @@ h1 {
 }
 
 body {
+    background-image: url("https://wallpapercave.com/wp/wp2890665.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-size: 100% 100%;
     background-color: black;
     color : whitesmoke;
     margin-left: 50px;
     margin-right: 50px;
+    height: 100%;
 }
 
 ul {
@@ -50,6 +55,8 @@ hr {
 .input {
     background-color: green;
     color: white;
+    border-radius: 85px;
+    padding: 7px;
 }
 
 #steps {

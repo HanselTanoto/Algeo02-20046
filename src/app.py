@@ -10,7 +10,7 @@ UPLOAD_FOLDER = 'static/uploads/'
 app.secret_key = "secret key"
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
  
-IMG_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
+IMG_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif', 'bmp', 'tif', 'tiff'])
  
 def allowed_extension(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in IMG_EXTENSIONS
@@ -34,7 +34,7 @@ def form():
         c_img.save(os.path.join(app.config['UPLOAD_FOLDER'], c_img_filename))
         return render_template('web.html', filename=filename, quality=quality, init_size=init_size, comp_size=comp_size, percentage=percentage, time=time, c_img_filename=c_img_filename)
     else:
-        flash('Allowed image types are: png, jpg, jpeg, gif')
+        flash('Allowed file type is image')
         return redirect(request.url)
  
 @app.route('/display/<filename>')
