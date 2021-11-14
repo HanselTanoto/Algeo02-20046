@@ -62,12 +62,12 @@
             <div class="contain">
                 {% if filename %}
                 <div class="imagepreview" id="image-preview">
-                    <img src="{{ url_for('display_result', filename=filename) }}" >
+                    <img src="{{ url_for('display', filename=filename) }}" >
                 </div>
                 {% endif %}
                 {% if filename %}
                 <div class="imagepreview" id="image-preview">
-                    <img src="{{ url_for('display_result', filename=c_img_filename) }}" >
+                    <img src="{{ url_for('display', filename=c_img_filename) }}" >
                 </div>
                 <p></p>
                     

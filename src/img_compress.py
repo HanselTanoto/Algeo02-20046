@@ -28,8 +28,8 @@ def main(file_name, c_rate):
     Time = round(stop - start, 3)
 
     # Ouput
-    init_size   = 'Initial size     : ' + str(size0) + ' bytes'
-    comp_size   = 'Compressed size  : ' + str(new_size) + ' bytes'  
-    percentage  = 'Percentage       : ' + str(round(float(new_size/size0*100), 2)) + '%'  
-    time        = 'Time taken       : ' + str(Time) + ' seconds'  
+    init_size   = 'Initial Size     : ' + str(size0) + ' bytes'
+    comp_size   = 'Compressed Size  : ' + str(new_size) + ' bytes'  
+    percentage  = 'Image Pixel Difference Percentage    : ' + str(round(float(new_size/size0*100), 2)) + '%'  
+    time        = 'Image Compression Time   : ' + str(Time) + ' seconds'  
     return init_size, comp_size, percentage, time, c_img
