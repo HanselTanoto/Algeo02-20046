@@ -10,6 +10,7 @@
 
 # Spesifikasi Tugas
 [Spesifikasi Tugas](https://informatika.stei.itb.ac.id/~rinaldi.munir/AljabarGeometri/2021-2022/Tubes2-Algeo-2021.pdf)
+Program ini merupakan sebuah website yang berfungsi mengompresi gambar menggunakan metode Singular Value Decomposition. Pada dasarnya, sebuah gambar dapat dimodelkan dengan sebuah matriks, dan dari matriks tersebut, dapat diolah menjadi bentuk matriks lainnya dalam waktu tertentu sebagai proses kompresi gambar. Informasi terpenting dari gambar tersebut tersimpan pada k kolom pertama matriks U, k nilai singular pertama, dan k baris pertama dari matriks V, sehingga dengan hanya mengambil data tersebut, dapat direkonstruksi matriks awal dengan resolusi yang lebih kecil. 
 
 # Petunjuk Penggunaan
 1.	Buka terminal (cmd), lalu install library yang diperlukan yaitu Pillow, opencv-python, flask, numpy, dan python-dotenv dengan cara ketik: pip install nama_library
